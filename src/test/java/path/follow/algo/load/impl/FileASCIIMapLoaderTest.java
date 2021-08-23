@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Test for {@link FileASCIIMapLoaderTest}.
+ * Tests for {@link FileASCIIMapLoaderTest}.
  *
  * @author ivan.gavlik
  */

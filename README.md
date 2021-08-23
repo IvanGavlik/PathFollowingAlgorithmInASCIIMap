@@ -24,7 +24,7 @@ The Program has three layers
 
 Each layer has own interface and they implementations are well tested.
 
-Application uses factories to instantiate particular interface implementation 
+Application uses method factories to instantiate particular interface implementation 
 Example: Input from file can be replaced with input from console.   
 
 ## Star tests

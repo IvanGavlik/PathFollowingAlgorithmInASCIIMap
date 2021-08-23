@@ -2,9 +2,9 @@ package path.follow.algo.load;
 
 import path.follow.algo.load.impl.FileASCIIMapLoader;
 import path.follow.algo.load.impl.InternalASCIIMapLoader;
+import path.follow.algo.util.Util;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Loader for ASCII map.
@@ -30,7 +30,7 @@ public interface ASCIIMapLoader {
      * @return loader for ASCII map {@link ASCIIMapLoader}
      */
     static ASCIIMapLoader getInstance(final String filePath) {
-        if (Objects.isNull(filePath) || filePath.trim().isEmpty()) {
+        if (!Util.haveValue(filePath)) {
             return new InternalASCIIMapLoader();
         }
         return new FileASCIIMapLoader(filePath);

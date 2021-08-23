@@ -9,7 +9,7 @@ import path.follow.algo.load.impl.InternalASCIIMapLoader;
 /**
  * Test for {@link ASCIIMapLoader}.
  *
- * Note only for static and default methods.
+ * Note only for static methods.
  *
  * @author ivan.gavlik
  */
@@ -17,7 +17,7 @@ public class ASCIIMapLoaderTest {
 
 
     /**
-     *  Test for create new ASCIIMapLoaderTest instance.
+     *  Test create new ASCIIMapLoaderTest instance.
      *
      *  Input
      *  filePath

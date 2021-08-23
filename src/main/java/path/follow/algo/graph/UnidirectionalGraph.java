@@ -1,5 +1,7 @@
 package path.follow.algo.graph;
 
+import path.follow.algo.graph.impl.UnidirectionalMatrixGraph;
+
 import java.util.List;
 
 /**
@@ -14,12 +16,18 @@ public interface UnidirectionalGraph<VERTEX> {
      * Get instance of UnidirectionalGraph.
      *
      * @param graphInstance {@link GraphInstance}
-     * @param asciiMap asciiMap
      * @param <VERTEX> VERTEX
      * @return new UnidirectionalGraph
      */
-    static <VERTEX> UnidirectionalGraph<VERTEX> getInstance(final GraphInstance graphInstance, final List<String> asciiMap) {
-        return null;
+    static <VERTEX> UnidirectionalGraph<VERTEX> getInstance(final GraphInstance graphInstance) {
+        switch (graphInstance) {
+            case LIST:
+                throw new RuntimeException("Not implemented");
+            case MATRIX:
+                return new UnidirectionalMatrixGraph<VERTEX>();
+            default:
+                throw new RuntimeException("Not implemented");
+        }
     }
 
     /**
