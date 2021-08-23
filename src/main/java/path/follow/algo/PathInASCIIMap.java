@@ -35,8 +35,9 @@ public final class PathInASCIIMap {
      * @return MapPath
      */
     public static MapPath find(final String[] args) {
-        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(ASCIIMapLoader.LoaderInstance.FILE);
-        final List<String> asciiMap =  asciiMapLoader.load();
+
+        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(args[0]);
+        final List<String> asciiMap = asciiMapLoader.load();
 
         final UnidirectionalGraph<String> graph = UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX, asciiMap);
 
