@@ -5,7 +5,10 @@ import path.follow.algo.convert.ASCIIMapToASCIIGraph;
 import path.follow.algo.graph.vertex.CharacterNode;
 import path.follow.algo.load.ASCIIMapLoader;
 import path.follow.algo.path.FindPath;
+import path.follow.algo.path.impl.DepthFirstPath;
 
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,12 +25,13 @@ public final class PathInASCIIMap {
     private static final int FIRST_PARAM = 0;
     private static final int SECOND_PARAM = 1;
     private static final int THIRD_PARAM = 2;
+    private static final int THREE = 3;
     private static final Character DEFAULT_START = '@';
     private static final Character DEFAULT_END = 'x';
 
     private PathInASCIIMap() { }
 
-    /**getEdgesCount
+    /**
      * App starts here.
      *
      * @param args cmd arguments
@@ -35,8 +39,11 @@ public final class PathInASCIIMap {
     @SuppressWarnings("checkstyle:Regexp")
     public static void main(final String[] args) {
         final MapPath path = find(args);
-        System.out.println("Letters " + path.getLetters());
-        System.out.println("Path as characters " + path.getPath());
+        System.out.print("Letters: ");
+        path.getLetters().forEach(System.out::print);
+        System.out.println();
+        System.out.print("Path as characters: ");
+        path.getPath().forEach(System.out::print);
     }
 
     /**
@@ -45,7 +52,9 @@ public final class PathInASCIIMap {
      * @param args program args
      * @return MapPath
      */
-    public static MapPath find(final String[] args) {
+    @SuppressWarnings({"checkstyle:ParameterAssignment", "checkstyle:FinalParameters"})
+    public static MapPath find(String[] args) {
+        args = (args == null || args.length < THREE ) ? new String[THREE] : args;
 
         final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(args[FIRST_PARAM]);
         final List<String> asciiMap = asciiMapLoader.load();
@@ -56,8 +65,12 @@ public final class PathInASCIIMap {
                 getFirstCharacter(args[THIRD_PARAM]) : DEFAULT_END;
         final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, startChar, endChar);
 
-        final FindPath<CharacterNode> findPath = FindPath.getInstance(FindPath.FindPathInstance.DEPTH_FIRST, graph.getGraph());
-        return new MapPath(null, null);
+        final FindPath<CharacterNode> findPath = new DepthFirstPath(graph.getGraph(), graph.getStart());
+        final Iterable<CharacterNode> nodePath = findPath.pathTo(graph.getEnd());
+        final List<Character> excludeStartAndEndCharacter = new ArrayList<>();
+        excludeStartAndEndCharacter.add(startChar);
+        excludeStartAndEndCharacter.add(endChar);
+        return new MapPath(nodePath, excludeStartAndEndCharacter);
     }
 
 
@@ -79,6 +92,31 @@ public final class PathInASCIIMap {
         MapPath(final List<Character> letters, final List<Character> path) {
             this.letters = letters;
             this.path = path;
+        }
+
+
+        /**
+         * Create new MapPath form nodes path {@link Iterable<CharacterNode>}.
+         *
+         * @param nodes {@link List<Character>}
+         * @param exclude exclude valued form letter result
+         */
+        @SuppressWarnings({"checkstyle:ParameterAssignment", "checkstyle:FinalParameters"})
+        MapPath(final Iterable<CharacterNode> nodes, List<Character> exclude) {
+            this.path = new ArrayList<>();
+            this.letters = new ArrayList<>();
+
+            if (exclude == null) {
+                exclude = new ArrayList<>();
+            }
+
+            final List<Character> finalExclude = exclude;
+            nodes.forEach(el -> {
+                if ( Character.isLetter(el.getValue()) && !finalExclude.contains(el.getValue())) {
+                    this.letters.add(el.getValue());
+                }
+                path.add(el.getValue());
+            });
         }
 
         public List<Character> getLetters() {

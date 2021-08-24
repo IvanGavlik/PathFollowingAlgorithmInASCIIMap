@@ -25,7 +25,7 @@ public final class ASCIIGraph {
      * @param start node
      * @param end node
      */
-    protected ASCIIGraph(final UnidirectionalGraph<CharacterNode> graph,
+    public ASCIIGraph(final UnidirectionalGraph<CharacterNode> graph,
                          final CharacterNode start,
                          final CharacterNode end) {
         this.graph = graph;

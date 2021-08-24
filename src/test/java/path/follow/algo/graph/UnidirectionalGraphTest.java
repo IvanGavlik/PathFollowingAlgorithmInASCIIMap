@@ -13,8 +13,6 @@ import path.follow.algo.graph.impl.UnidirectionalMatrixGraph;
  */
 public class UnidirectionalGraphTest {
 
-    private UnidirectionalGraph unidirectionalGraph;
-
 
     /**
      *  Test create new UnidirectionalGraph instance.

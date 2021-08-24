@@ -4,9 +4,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import path.follow.algo.graph.UnidirectionalGraph;
 import path.follow.algo.graph.vertex.CharacterNode;
+import path.follow.algo.stub.ASCIIMapStub;
+import path.follow.algo.stub.UnidirectionalGraphStub;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Tests for {@link ASCIIMapToASCIIGraph}.
@@ -40,11 +41,11 @@ public class ASCIIMapToASCIIGraphTest {
     public void basic() {
         final Character startChar = '@';
         final Character endChar = 'x';
-        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(getBasicASCIIMap() , startChar, endChar);
+        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap() , startChar, endChar);
 
         Assertions.assertEquals(startChar, graph.getStart().getValue());
         Assertions.assertEquals(endChar, graph.getEnd().getValue());
-        final UnidirectionalGraph<CharacterNode> expectedGraph = getBasicASCIIGraph();
+        final UnidirectionalGraph<CharacterNode> expectedGraph = UnidirectionalGraphStub.getBasicASCIIGraph();
         Assertions.assertEquals(expectedGraph.getEdgesCount(), graph.getGraph().getEdgesCount());
         Assertions.assertEquals(expectedGraph.getVertexCount(), graph.getGraph().getVertexCount());
         Assertions.assertEquals(expectedGraph.toString(), graph.getGraph().toString());
@@ -66,11 +67,11 @@ public class ASCIIMapToASCIIGraphTest {
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(getBasicASCIIMap(), null, 'X');
+            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), null, 'X');
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(getBasicASCIIMap(), '@', null);
+            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), '@', null);
         });
     }
 
@@ -96,58 +97,4 @@ public class ASCIIMapToASCIIGraphTest {
         Assertions.assertNull(graph.getEnd());
     }
 
-    private List<String> getBasicASCIIMap() {
-        final List<String> list = new ArrayList<>();
-        list.add("@-A-+");
-        list.add("    |");
-        list.add("    x");
-        return list;
-    }
-
-    @SuppressWarnings("checkstyle:MagicNumber")
-    private UnidirectionalGraph<CharacterNode> getBasicASCIIGraph() {
-        final UnidirectionalGraph<CharacterNode> graph = UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX);
-
-        final CharacterNode c00 = new CharacterNode(0, 0, '@');
-        graph.addVertex(c00);
-
-        final CharacterNode c10 = new CharacterNode(1, 0, '-');
-        graph.addVertex(c10);
-
-        final CharacterNode c20 = new CharacterNode(2, 0, 'A');
-        graph.addVertex(c20);
-
-        final CharacterNode c30 = new CharacterNode(3, 0, '-');
-        graph.addVertex(c30);
-
-        final CharacterNode c40 = new CharacterNode(4, 0, '+');
-        graph.addVertex(c40);
-
-        final CharacterNode c41 = new CharacterNode(4, 1, '|');
-        graph.addVertex(c41);
-
-        final CharacterNode c42 = new CharacterNode(4, 2, 'x');
-        graph.addVertex(c42);
-
-        graph.addEdge(c00, c10);
-
-        graph.addEdge(c10, c00);
-        graph.addEdge(c10, c20);
-
-        graph.addEdge(c20, c30);
-        graph.addEdge(c20, c10);
-
-        graph.addEdge(c30, c20);
-        graph.addEdge(c30, c40);
-
-        graph.addEdge(c40, c41);
-        graph.addEdge(c40, c30);
-
-        graph.addEdge(c41, c42);
-        graph.addEdge(c41, c40);
-
-        graph.addEdge(c42, c41);
-
-        return graph;
-    }
 }
