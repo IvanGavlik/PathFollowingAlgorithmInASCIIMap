@@ -13,12 +13,13 @@ import path.follow.algo.graph.UnidirectionalGraph;
  */
 public class UnidirectionalMatrixGraphTest {
 
+
     private UnidirectionalGraph<Integer> graph;
 
     /**
      * Initialise graph before each test.
      */
-    @BeforeEach()
+    @BeforeEach
     public void init() {
         this.graph = UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX);
     }
@@ -26,7 +27,7 @@ public class UnidirectionalMatrixGraphTest {
     /**
      * Test empty graph.
      */
-    @Test()
+    @Test
     public void testEmpty() {
         Assertions.assertEquals(0, this.graph.getEdgesCount());
         Assertions.assertEquals(0, this.graph.getVertexCount());
@@ -36,7 +37,8 @@ public class UnidirectionalMatrixGraphTest {
     /**
      * Test basic graph.
      */
-    @Test()
+    @Test
+    @SuppressWarnings("checkstyle:MagicNumber")
     public void basicGraph() {
 
         // add one vertex
@@ -73,7 +75,8 @@ public class UnidirectionalMatrixGraphTest {
     /**
      * Test edge on same vertex.
      */
-    @Test()
+    @Test
+    @SuppressWarnings("checkstyle:MagicNumber")
     public void edgeOnSameVertex() {
 
         // add one vertex

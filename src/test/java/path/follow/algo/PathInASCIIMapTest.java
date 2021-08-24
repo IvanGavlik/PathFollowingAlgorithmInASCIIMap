@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
  */
 public class PathInASCIIMapTest {
 
+    //TODO TEST CONFIGURATION FOR FIND METHOD
+
     /**
      * Instance of {@link PathInASCIIMap}.
      */

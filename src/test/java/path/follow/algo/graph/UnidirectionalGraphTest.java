@@ -1,6 +1,7 @@
 package path.follow.algo.graph;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import path.follow.algo.graph.impl.UnidirectionalMatrixGraph;
 
 /**
@@ -24,6 +25,7 @@ public class UnidirectionalGraphTest {
      *  Output
      *  Corresponding instance or {@link RuntimeException}.
      */
+    @Test
     public void getInstance() {
         final UnidirectionalGraph graph = UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX);
         Assertions.assertEquals(UnidirectionalMatrixGraph.class, graph.getClass());
