@@ -9,9 +9,7 @@ import java.util.Objects;
  */
 public final class Util {
 
-    private Util() {
-        // should not called this is util class
-    }
+    private Util() { }
 
     /**
      * True if passed String have value.
@@ -20,10 +18,7 @@ public final class Util {
      * @return true if passed String have value.
      */
     public static boolean haveValue(final String value) {
-        if (Objects.isNull(value) || value.trim().isEmpty()) {
-            return false;
-        }
-        return true;
+        return !Objects.isNull(value) && !value.trim().isEmpty();
     }
 
     /**
@@ -35,7 +30,7 @@ public final class Util {
     public static Character getFirstCharacter(final String value) {
         final int firstLetter = 0;
         if (!Objects.isNull(value)) {
-            return Character.valueOf(value.charAt(firstLetter));
+            return value.charAt(firstLetter);
         }
         return null;
     }

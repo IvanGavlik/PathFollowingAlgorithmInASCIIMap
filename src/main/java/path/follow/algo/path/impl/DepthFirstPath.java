@@ -20,7 +20,8 @@ public final class DepthFirstPath implements FindPath<CharacterNode> {
 
 
     /**
-     * Computes a path between source {@link CharacterNode} and every other vertex in graph {@link CharacterNode}.
+     * Computes a path between source {@link CharacterNode} and
+     * every other vertex in graph {@link CharacterNode}.
      *
      * @param graph {@link UnidirectionalGraph<CharacterNode>}
      * @param source {@link CharacterNode}
@@ -59,14 +60,14 @@ public final class DepthFirstPath implements FindPath<CharacterNode> {
      */
     @Override
     public Iterable<CharacterNode> pathTo(final CharacterNode destination) {
-        if (destination == null || !hasPathTo(destination)) {
+        if (!hasPathTo(destination)) {
             return new ArrayList<>();
         }
         edgeTo.add(destination);
         return edgeTo;
     }
 
-    // depth first search from v
+    // depth first search from source
     private void dfs(final UnidirectionalGraph<CharacterNode> graph, final CharacterNode source) {
         marked[source.getX()][source.getY()] = true;
         for (CharacterNode w : graph.getAdj(source)) {

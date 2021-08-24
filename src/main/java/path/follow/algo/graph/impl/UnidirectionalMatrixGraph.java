@@ -10,15 +10,14 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 /**
- * UnidirectionalMatrixGraph is implementation of unidirectional graph.
- * using matrix (map)
+ * Implementation of unidirectional graph using matrix (map).
  *
  * @param <VERTEX>
  * @author ivan.gavlik
  */
 public class UnidirectionalMatrixGraph<VERTEX> implements UnidirectionalGraph<VERTEX> {
 
-    // We use Hashmap to store the edges in the graph
+    // HashMap to store the edges in the graph
     private Map<VERTEX, List<VERTEX>> map = new HashMap<>();
 
     /**
@@ -110,7 +109,7 @@ public class UnidirectionalMatrixGraph<VERTEX> implements UnidirectionalGraph<VE
      */
     @Override
     public boolean hasEdge(final VERTEX source, final VERTEX destination) {
-        return map.get(source) != null ? map.get(source).contains(destination) : false;
+        return map.get(source) != null && map.get(source).contains(destination);
     }
 
     /**
@@ -123,7 +122,7 @@ public class UnidirectionalMatrixGraph<VERTEX> implements UnidirectionalGraph<VE
         for (Map.Entry<VERTEX, List<VERTEX>> i : map.entrySet()) {
             builder.append(i.getKey().toString() + ": ");
             for (VERTEX j : i.getValue()) {
-                builder.append(j.toString() + " ");
+                builder.append(j.toString()).append(" ");
             }
             builder.append("\n");
         }

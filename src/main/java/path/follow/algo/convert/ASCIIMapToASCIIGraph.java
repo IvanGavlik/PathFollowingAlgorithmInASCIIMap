@@ -18,9 +18,7 @@ public final class ASCIIMapToASCIIGraph {
 
     private static final int ASCII_MAP_SIZE = 127;
 
-    private ASCIIMapToASCIIGraph() {
-        // should not called this is util class
-    }
+    private ASCIIMapToASCIIGraph() { }
 
     /**
      * Convert ASCII map into Unidirectional graph.
@@ -58,7 +56,7 @@ public final class ASCIIMapToASCIIGraph {
 
                 Stream.of(DirectionType.getDirectionForChar(DirectionType.LEFT, current.getValue()))
                         .map(direction -> getChar(finalI + direction.getX(), finalJ + direction.getY(), map))
-                        .filter(destination -> destination.isPresent())
+                        .filter(Optional::isPresent)
                         .forEach(destination -> {
                             if (current.getValue().equals(start)) {
                                 startNode.set(current);

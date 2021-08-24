@@ -7,6 +7,7 @@ import java.util.Objects;
 
 /**
  * Represents ASCIIGraph.
+ *
  * It is unidirectional graph where vertices are {@link CharacterNode}
  * and with explicit access to start vertices and end vertices.
  *

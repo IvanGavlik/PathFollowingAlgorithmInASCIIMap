@@ -1,6 +1,5 @@
 package path.follow.algo.convert;
 
-import path.follow.algo.util.Util;
 
 /**
  * Represents direction,
