@@ -1,11 +1,16 @@
 package path.follow.algo;
 
-import path.follow.algo.graph.UnidirectionalGraph;
+import path.follow.algo.convert.ASCIIGraph;
+import path.follow.algo.convert.ASCIIMapToASCIIGraph;
+import path.follow.algo.graph.vertex.CharacterNode;
 import path.follow.algo.load.ASCIIMapLoader;
 import path.follow.algo.path.FindPath;
 
 import java.util.List;
 import java.util.Objects;
+
+import static path.follow.algo.util.Util.getFirstCharacter;
+import static path.follow.algo.util.Util.haveValue;
 
 /**
  * App - starts application.
@@ -14,9 +19,15 @@ import java.util.Objects;
  */
 public final class PathInASCIIMap {
 
+    private static final int FIRST_PARAM = 0;
+    private static final int SECOND_PARAM = 1;
+    private static final int THIRD_PARAM = 2;
+    private static final Character DEFAULT_START = '@';
+    private static final Character DEFAULT_END = 'x';
+
     private PathInASCIIMap() { }
 
-    /**
+    /**getEdgesCount
      * App starts here.
      *
      * @param args cmd arguments
@@ -36,14 +47,20 @@ public final class PathInASCIIMap {
      */
     public static MapPath find(final String[] args) {
 
-        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(args[0]);
+        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(args[FIRST_PARAM]);
         final List<String> asciiMap = asciiMapLoader.load();
 
-        final UnidirectionalGraph<String> graph = UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX, asciiMap);
+        final Character startChar = haveValue(args[SECOND_PARAM]) ?
+                getFirstCharacter(args[SECOND_PARAM]) : DEFAULT_START;
+        final Character endChar = haveValue(args[THIRD_PARAM]) ?
+                getFirstCharacter(args[THIRD_PARAM]) : DEFAULT_END;
+        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, startChar, endChar);
 
-        final FindPath<String> findPath = FindPath.getInstance(FindPath.FindPathInstance.DEPTH_FIRST, graph);
+        final FindPath<CharacterNode> findPath = FindPath.getInstance(FindPath.FindPathInstance.DEPTH_FIRST, graph.getGraph());
         return new MapPath(null, null);
     }
+
+
 
     /**
      * Represents output of program.

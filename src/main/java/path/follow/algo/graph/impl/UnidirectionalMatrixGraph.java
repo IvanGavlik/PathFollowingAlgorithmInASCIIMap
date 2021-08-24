@@ -1,9 +1,13 @@
 package path.follow.algo.graph.impl;
 
-import com.sun.org.apache.regexp.internal.RE;
+
 import path.follow.algo.graph.UnidirectionalGraph;
 
-import java.util.*;
+import java.util.Map;
+import java.util.List;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ArrayList;
 
 /**
  * UnidirectionalMatrixGraph is implementation of unidirectional graph.
@@ -15,7 +19,7 @@ import java.util.*;
 public class UnidirectionalMatrixGraph<VERTEX> implements UnidirectionalGraph<VERTEX> {
 
     // We use Hashmap to store the edges in the graph
-    private Map<VERTEX, List<VERTEX> > map = new HashMap<>();
+    private Map<VERTEX, List<VERTEX>> map = new HashMap<>();
 
     /**
      * Add a new vertex to the graph.
@@ -80,7 +84,7 @@ public class UnidirectionalMatrixGraph<VERTEX> implements UnidirectionalGraph<VE
     public int getEdgesCount() {
         int count = 0;
         for (Map.Entry<VERTEX, List<VERTEX>> v : map.entrySet()) {
-            count += v.getValue() != null ? v.getValue().size(): 0;
+            count += v.getValue() != null ? v.getValue().size() : 0;
         }
 
         return count;

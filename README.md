@@ -34,3 +34,11 @@ Example: Input from file can be replaced with input from console.
 ### User guide
 
 ### Docs
+
+TODO 
+- testovi za ovo što imam
+- validacija
+- logiranje ? 
+- read me
+- upute 
+
