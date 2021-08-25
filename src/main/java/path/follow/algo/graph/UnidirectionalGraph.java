@@ -21,10 +21,9 @@ public interface UnidirectionalGraph<VERTEX> {
      */
     static <VERTEX> UnidirectionalGraph<VERTEX> getInstance(final GraphInstance graphInstance) {
         switch (graphInstance) {
-            case LIST:
-                throw new RuntimeException("Not implemented");
             case MATRIX:
-                return new UnidirectionalMatrixGraph<VERTEX>();
+                return new UnidirectionalMatrixGraph<>();
+            case LIST:
             default:
                 throw new RuntimeException("Not implemented");
         }
