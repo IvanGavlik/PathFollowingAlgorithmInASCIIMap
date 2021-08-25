@@ -51,4 +51,31 @@ public final class ASCIIGraphStub {
         path.add(UnidirectionalGraphStub.BASIC_END);
         return path;
     }
+
+    /**
+     * Get broken path for basic graph
+     * where start is @
+     * and end x
+     *
+     * Basic Graph.
+     *         @-A-+
+     *
+     *             x
+     *
+     * @return path {@link List<CharacterNode>}
+     */
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public static List<CharacterNode> getBasicBrokenPath() {
+        final List<CharacterNode> path = new ArrayList<>();
+
+        path.add(UnidirectionalGraphStub.BASIC_START);
+        path.add(new CharacterNode(1, 0, '-'));
+        path.add(new CharacterNode(2, 0, 'A'));
+        path.add(new CharacterNode(3, 0, '-'));
+        path.add(new CharacterNode(4, 0, '+'));
+
+        path.add(UnidirectionalGraphStub.BASIC_END);
+
+        return path;
+    }
 }

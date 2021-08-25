@@ -6,6 +6,9 @@ import path.follow.algo.graph.vertex.CharacterNode;
 import path.follow.algo.load.ASCIIMapLoader;
 import path.follow.algo.path.FindPath;
 import path.follow.algo.path.impl.DepthFirstPath;
+import path.follow.algo.validation.Validation;
+import path.follow.algo.validators.MustHaveOneCharacter;
+import path.follow.algo.validators.PathIsNotBroken;
 
 
 import java.util.ArrayList;
@@ -50,7 +53,7 @@ public final class PathInASCIIMap {
      * Find and return path if exist.
      *
      * @param args program args
-     * @return MapPath
+     * @return {@link MapPath}
      */
     @SuppressWarnings({"checkstyle:ParameterAssignment", "checkstyle:FinalParameters"})
     public static MapPath find(String[] args) {
@@ -63,10 +66,21 @@ public final class PathInASCIIMap {
                 getFirstCharacter(args[SECOND_PARAM]) : DEFAULT_START;
         final Character endChar = haveValue(args[THIRD_PARAM]) ?
                 getFirstCharacter(args[THIRD_PARAM]) : DEFAULT_END;
+
+        new Validation<>(asciiMap)
+                .add(new MustHaveOneCharacter(startChar))
+                .add(new MustHaveOneCharacter(endChar))
+                .isValidOrElseThrow();
+
         final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, startChar, endChar);
 
         final FindPath<CharacterNode> findPath = new DepthFirstPath(graph.getGraph(), graph.getStart());
+        new Validation<>(findPath)
+                .add(new PathIsNotBroken(graph.getEnd()))
+                .isValidOrElseThrow();
+
         final Iterable<CharacterNode> nodePath = findPath.pathTo(graph.getEnd());
+
         final List<Character> excludeStartAndEndCharacter = new ArrayList<>();
         excludeStartAndEndCharacter.add(startChar);
         excludeStartAndEndCharacter.add(endChar);
@@ -77,7 +91,7 @@ public final class PathInASCIIMap {
 
     /**
      * Represents output of program.
-     * Output is collected letters on path and path as characters.
+     * Output is collected letters on path as characters.
      */
     static final class MapPath {
         private final List<Character> letters;
