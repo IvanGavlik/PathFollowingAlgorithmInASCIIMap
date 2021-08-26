@@ -1,14 +1,14 @@
 package path.follow.algo.validators;
 
-import path.follow.algo.graph.vertex.CharacterNode;
-import path.follow.algo.path.FindPath;
 import path.follow.algo.validation.Validator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 
 /**
- * Validate that path is not broken
+ * Validate that path is not broken.
  *
  * Example of broken path.
  *   @--A-+
@@ -18,32 +18,49 @@ import java.util.Objects;
  *
  * @author ivan.gavlik
  */
-public class PathIsNotBroken implements Validator<FindPath<CharacterNode>> {
-
-    private CharacterNode node;
-
-    /**
-     * Create new instance of PathIsNotBroken validator.
-     *
-     * @param node {@link CharacterNode}
-     */
-    public PathIsNotBroken(final CharacterNode node) {
-        if (Objects.isNull(node)) {
-            throw new IllegalArgumentException();
-        }
-        this.node = node;
-    }
+public class PathIsNotBroken implements Validator<List<String>> {
 
     @Override
-    public String getMsgOnFail(final FindPath<CharacterNode> asciiGraph) {
+    public String getMsgOnFail(final List<String> map) {
         return "Path is broken";
     }
 
     @Override
-    public boolean test(final FindPath<CharacterNode> asciiGraph) {
-        if (Objects.isNull(asciiGraph)) {
+    @SuppressWarnings("checkstyle:CyclomaticComplexity")
+    public boolean test(final List<String> map) {
+        if (Objects.isNull(map)) {
             return false;
         }
-        return asciiGraph.hasPathTo(this.node);
+
+        /*
+         * For every element map check
+         * that there is at least neighbour
+         */
+        final List<Boolean> eachEl = new ArrayList<>();
+        for (int i = 0; i < map.size(); i++) {
+            for (int j = 0; j < map.get(i).length(); j++) {
+
+                final boolean havePathUpLeft = haveChar(map, i - 1, j) && haveChar(map, i, j + 1);
+                final boolean havePathUpRight = haveChar(map, i + 1, j) && haveChar(map, i, j + 1);
+                final boolean havePathDownLeft = haveChar(map, i - 1, j) && haveChar(map, i, j - 1);
+                final boolean havePathDownRight = haveChar(map, i + 1, j) && haveChar(map, i, j - 1);
+
+                final boolean haveNeighbour = havePathUpLeft || havePathUpRight || havePathDownLeft || havePathDownRight;
+                eachEl.add(haveNeighbour);
+
+                }
+            }
+
+            return eachEl.stream().filter( el -> !el).count() == 0;
+        }
+
+    @SuppressWarnings("checkstyle:IllegalCatch")
+    private boolean haveChar(final List<String> map, final int i, final int j) {
+        try {
+            map.get(i).charAt(j);
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
     }
 }
