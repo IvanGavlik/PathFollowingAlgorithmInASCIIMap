@@ -16,11 +16,6 @@ public class PathInASCIIMapTest {
     //TODO TEST CONFIGURATION FOR FIND METHOD
 
     /**
-     * Instance of {@link PathInASCIIMap}.
-     */
-    private PathInASCIIMap findFath;
-
-    /**
      * Basic test.
      *
      * Input:
@@ -42,7 +37,7 @@ public class PathInASCIIMapTest {
     public void testPaths(final String pathToInputFile, final String expectedLetters, final String expectedPath) {
         final String[] programArgs = {pathToInputFile};
         final PathInASCIIMap.MapPath path = PathInASCIIMap.find(programArgs);
-     //   Assertions.assertEquals(expectedLetters, path.getLetters()); // TODO
+        Assertions.assertEquals(expectedLetters, path.getLetters());
         Assertions.assertEquals(expectedPath, path.getPath());
     }
 
