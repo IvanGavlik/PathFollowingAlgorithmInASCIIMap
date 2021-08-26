@@ -88,13 +88,9 @@ public class ASCIIMapToASCIIGraphTest {
     @Test
     @SuppressWarnings("checkstyle:MagicNumber")
     public void testEmpty() {
-        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(new ArrayList<String>(), '@', 'x');
-        Assertions.assertNotNull(graph);
-        Assertions.assertNotNull(graph.getGraph());
-        Assertions.assertEquals(0, graph.getGraph().getVertexCount());
-        Assertions.assertEquals(0, graph.getGraph().getEdgesCount());
-        Assertions.assertNull(graph.getStart());
-        Assertions.assertNull(graph.getEnd());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ASCIIMapToASCIIGraph.convert(new ArrayList<String>(), '@', 'x');
+        });
     }
 
 }

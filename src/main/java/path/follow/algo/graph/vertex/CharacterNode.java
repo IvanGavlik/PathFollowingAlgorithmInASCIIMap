@@ -15,13 +15,13 @@ public final class CharacterNode {
     /**
      * Create new CharacterNode.
      *
-     * @param x position on X Axis in map
      * @param y position on Y Axis in map
+     * @param x position on X Axis in map
      * @param value Character
      */
-    public CharacterNode(final int x, final int y, final Character value) {
-        this.x = x;
+    public CharacterNode(final int y, final int x, final Character value) {
         this.y = y;
+        this.x = x;
         this.value = value;
     }
 

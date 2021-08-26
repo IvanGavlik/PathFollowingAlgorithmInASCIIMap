@@ -25,47 +25,43 @@ public class DirectionTypeTest {
     @Test
     public void getDirection() {
         // on letter change direction
-        DirectionType[] directions = DirectionType.getDirectionForChar(DirectionType.LEFT, 'A');
-        DirectionType[] expectChangeDirection = new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM,
-                DirectionType.LEFT, DirectionType.RIGHT};
+        DirectionType[] directions = DirectionType.getDirectionsForChar(DirectionType.LEFT, 'A');
+        DirectionType[] expectChangeDirection = new DirectionType[]{DirectionType.RIGHT, DirectionType.LEFT,
+                DirectionType.TOP, DirectionType.BOTTOM};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
-        directions = DirectionType.getDirectionForChar(DirectionType.TOP, 'A');
-        expectChangeDirection = new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT,
-                DirectionType.TOP, DirectionType.BOTTOM};
+        directions = DirectionType.getDirectionsForChar(DirectionType.TOP, 'A');
+        expectChangeDirection = new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM,
+                DirectionType.RIGHT, DirectionType.LEFT};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
         // on + change direction
-        directions = DirectionType.getDirectionForChar(DirectionType.LEFT, '+');
+        directions = DirectionType.getDirectionsForChar(DirectionType.LEFT, '+');
         expectChangeDirection = new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM,
                 DirectionType.LEFT, DirectionType.RIGHT};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
-        directions = DirectionType.getDirectionForChar(DirectionType.TOP, '+');
+        directions = DirectionType.getDirectionsForChar(DirectionType.TOP, '+');
         expectChangeDirection = new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT,
                 DirectionType.TOP, DirectionType.BOTTOM};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
         // on other ASCII value keep direction
-        directions = DirectionType.getDirectionForChar(DirectionType.LEFT, '&');
-        expectChangeDirection = new DirectionType[]{DirectionType.RIGHT, DirectionType.LEFT,
-                DirectionType.TOP, DirectionType.BOTTOM};
+        directions = DirectionType.getDirectionsForChar(DirectionType.LEFT, '&');
+        expectChangeDirection = new DirectionType[]{DirectionType.LEFT};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
-        directions = DirectionType.getDirectionForChar(DirectionType.TOP, '&');
-        expectChangeDirection = new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM,
-                DirectionType.RIGHT, DirectionType.LEFT};
+        directions = DirectionType.getDirectionsForChar(DirectionType.TOP, '&');
+        expectChangeDirection = new DirectionType[]{DirectionType.TOP};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
         // on other ASCII value keep direction
-        directions = DirectionType.getDirectionForChar(DirectionType.LEFT, '#');
-        expectChangeDirection = new DirectionType[]{DirectionType.RIGHT, DirectionType.LEFT,
-                DirectionType.TOP, DirectionType.BOTTOM};
+        directions = DirectionType.getDirectionsForChar(DirectionType.LEFT, '#');
+        expectChangeDirection = new DirectionType[]{DirectionType.LEFT};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
-        directions = DirectionType.getDirectionForChar(DirectionType.TOP, '#');
-        expectChangeDirection = new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM,
-                DirectionType.RIGHT, DirectionType.LEFT};
+        directions = DirectionType.getDirectionsForChar(DirectionType.TOP, '#');
+        expectChangeDirection = new DirectionType[]{DirectionType.TOP};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
     }
 
@@ -82,7 +78,7 @@ public class DirectionTypeTest {
     @Test
     public void changeDirectionOnNull() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            DirectionType.getDirectionForChar(DirectionType.TOP, null);
+            DirectionType.getDirectionsForChar(DirectionType.TOP, null);
         });
     }
 
@@ -97,14 +93,12 @@ public class DirectionTypeTest {
      */
     @Test
     public void changeDirectionOnSpace() {
-        DirectionType[] directions = DirectionType.getDirectionForChar(DirectionType.LEFT, ' ');
-        DirectionType[] expectChangeDirection = new DirectionType[]{DirectionType.RIGHT, DirectionType.LEFT,
-                DirectionType.TOP, DirectionType.BOTTOM};
+        DirectionType[] directions = DirectionType.getDirectionsForChar(DirectionType.LEFT, ' ');
+        DirectionType[] expectChangeDirection = new DirectionType[]{DirectionType.LEFT};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
 
-        directions = DirectionType.getDirectionForChar(DirectionType.TOP, ' ');
-        expectChangeDirection = new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM,
-                DirectionType.RIGHT, DirectionType.LEFT};
+        directions = DirectionType.getDirectionsForChar(DirectionType.TOP, ' ');
+        expectChangeDirection = new DirectionType[]{DirectionType.TOP};
         Assertions.assertEquals(true, Arrays.equals(expectChangeDirection, directions));
     }
 }

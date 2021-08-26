@@ -71,8 +71,8 @@ public final class DepthFirstPath implements FindPath<CharacterNode> {
     private void dfs(final UnidirectionalGraph<CharacterNode> graph, final CharacterNode source) {
         marked[source.getX()][source.getY()] = true;
         for (CharacterNode w : graph.getAdj(source)) {
+            edgeTo.add(source);
             if (!marked[w.getX()][w.getY()]) {
-                edgeTo.add(source);
                 dfs(graph, w);
             }
         }

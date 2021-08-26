@@ -9,7 +9,7 @@ package path.follow.algo.convert;
  *
  * @author ivan.gavlik
  */
-enum DirectionType {
+public enum DirectionType { // todo RENAME Direction
     /**
      * Move right one step.
      */
@@ -39,9 +39,9 @@ enum DirectionType {
      * @param x X Axis
      * @param y Y Axis
      */
-    DirectionType(final int x, final int y) {
-        this.x = x;
+    DirectionType(final int y, final int x) {
         this.y = y;
+        this.x = x;
     }
 
     /**
@@ -71,9 +71,11 @@ enum DirectionType {
     private static DirectionType[] keepDirectionFirst(final DirectionType directionType) {
         switch (directionType) {
             case TOP:
-            case BOTTOM:
                 return new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM, DirectionType.RIGHT, DirectionType.LEFT};
+            case BOTTOM:
+                return new DirectionType[]{DirectionType.BOTTOM, DirectionType.TOP, DirectionType.RIGHT, DirectionType.LEFT};
             case RIGHT:
+                return new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT, DirectionType.TOP, DirectionType.BOTTOM};
             case LEFT:
                 return new DirectionType[]{DirectionType.RIGHT, DirectionType.LEFT, DirectionType.TOP, DirectionType.BOTTOM};
             default:
@@ -90,9 +92,11 @@ enum DirectionType {
     private static DirectionType[] changedDirectionsFirst(final DirectionType directionType) {
         switch (directionType) {
             case TOP:
-            case BOTTOM:
                 return new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT, DirectionType.TOP, DirectionType.BOTTOM};
+            case BOTTOM:
+                return new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT, DirectionType.BOTTOM, DirectionType.TOP};
             case RIGHT:
+                return new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM, DirectionType.RIGHT, DirectionType.LEFT};
             case LEFT:
                 return new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM, DirectionType.LEFT, DirectionType.RIGHT};
             default:
@@ -109,14 +113,17 @@ enum DirectionType {
      * @param character Character
      * @return directions for passed character
      */
-    public static DirectionType[] getDirectionForChar(final DirectionType directionType, final Character character) {
+    public static DirectionType[] getDirectionsForChar(final DirectionType directionType, final Character character) {
         if (character == null) {
             throw new IllegalArgumentException("Character is null");
         }
-        if ( Character.isLetter(character) || '+' == character) {
+        if ( '+' == character) {
             return changedDirectionsFirst(directionType);
         }
-        return keepDirectionFirst(directionType);
+        if  (Character.isLetter(character)) {
+            return keepDirectionFirst(directionType);
+        }
+        return new DirectionType[]{directionType};
     }
 
 }

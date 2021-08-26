@@ -6,7 +6,6 @@ import path.follow.algo.graph.vertex.CharacterNode;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
 /**
@@ -36,40 +35,92 @@ public final class ASCIIMapToASCIIGraph {
         if (map == null || start == null || end == null) {
             throw new IllegalArgumentException("map " + map + " start " + start + " end " + end);
         }
-        final UnidirectionalGraph<CharacterNode> graph = UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX);
 
-        final AtomicReference<CharacterNode> startNode = new AtomicReference<>();
-        final AtomicReference<CharacterNode> destinationNode = new AtomicReference<>();
+        final UnidirectionalGraph<CharacterNode> graph =
+                UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX);
 
+        final CharacterNode startNode = getNodeFromMap(map, start);
+        final CharacterNode destinationNode = getNodeFromMap(map, end);
+
+        convertUtil(map, graph, startNode, getStartDirection(map, startNode), destinationNode);
+
+        return new ASCIIGraph(graph, startNode, destinationNode);
+    }
+
+    private static CharacterNode getNodeFromMap(final List<String> map, final Character character) {
         for (int i = 0; i < map.size(); i++) {
             for (int j = 0; j < map.get(i).length(); j++) {
-
-                final Optional<CharacterNode> currentOptional = getChar(i, j, map);
-                if (!currentOptional.isPresent()) {
-                    continue;
+                if (map.get(i).charAt(j) == character) {
+                    return getNodeFromMap(map, i, j).get();
                 }
-
-                final CharacterNode current = currentOptional.get();
-
-                final int finalI = i;
-                final int finalJ = j;
-
-                Stream.of(DirectionType.getDirectionForChar(DirectionType.LEFT, current.getValue()))
-                        .map(direction -> getChar(finalI + direction.getX(), finalJ + direction.getY(), map))
-                        .filter(Optional::isPresent)
-                        .forEach(destination -> {
-                            if (current.getValue().equals(start)) {
-                                startNode.set(current);
-                            }
-                            if (current.getValue().equals(end)) {
-                                destinationNode.set(current);
-                            }
-                            graph.addEdge(current, destination.get());
-                        });
             }
         }
+        throw new IllegalArgumentException("Character does't exist in map" + character);
+    }
 
-        return new ASCIIGraph(graph, startNode.get(), destinationNode.get());
+    private static DirectionType getStartDirection(final List<String> map, final CharacterNode node) {
+
+        final Optional<DirectionType> nodeStartDirection = Stream.of(DirectionType.values())
+                .filter(el -> getNodeFromMap(map, getYMove(node, el), getXMove(node, el)).isPresent())
+                .findFirst();
+
+        if (!nodeStartDirection.isPresent()) {
+            throw new IllegalArgumentException("Character node does't have direction" + node);
+        }
+        return nodeStartDirection.get();
+    }
+
+    private static void convertUtil(final List<String> map, final UnidirectionalGraph<CharacterNode> graph,
+                                    final CharacterNode current, final DirectionType currentDirection,
+                                    final CharacterNode finalDestination) {
+        if (current.equals(finalDestination)) {
+            return;
+        }
+
+        final Optional<CharacterNode> nextOptional =
+                getNodeFromMap(map, getYMove(current, currentDirection), getXMove(current, currentDirection));
+        if (!nextOptional.isPresent()) {
+            return;
+        }
+
+        final CharacterNode next = nextOptional.get();
+        graph.addEdge(current, next);
+
+        final Optional<?> nextDirectionOptional =
+                 Stream.of(DirectionType.getDirectionsForChar(currentDirection, next.getValue()))
+                .map(direction -> {
+                    final Optional<CharacterNode> tempNext =
+                            getNodeFromMap(map, getYMove(next, direction), getXMove(next, direction));
+                    // tempNext exist and it is not current
+                    if (tempNext.isPresent() && !tempNext.get().equals(current)) {
+                        return Optional.of(direction);
+                    } else {
+                        return Optional.empty();
+                    }
+                })
+                .filter(el -> el.isPresent())
+                .map(el -> el.get())
+                .findFirst();
+
+        if (!nextDirectionOptional.isPresent()) {
+            return;
+        }
+        if (!(nextDirectionOptional.get() instanceof DirectionType)) {
+            // this should never happen
+            throw new ClassCastException("nextDirectionOptional#get must be DirectionType");
+        }
+        final DirectionType nextDirection = (DirectionType) nextDirectionOptional.get();
+
+        convertUtil(map, graph, next, nextDirection, finalDestination);
+
+    }
+
+    private static int getXMove(final CharacterNode n, final DirectionType directionType) {
+        return n.getX() + directionType.getX();
+    }
+
+    private static int getYMove(final CharacterNode n, final DirectionType directionType) {
+        return n.getY() + directionType.getY();
     }
 
     /**
@@ -77,17 +128,17 @@ public final class ASCIIMapToASCIIGraph {
      *
      * IF there is no value form ASCII table https://www.asciitable.com/ or value is space returns empty optional.
      *
-     * @param i X Axis
-     * @param j Y Axis
      * @param map ASCIIMap {@link List<String>}
+     * @param y Y Axis
+     * @param x X Axis
      * @return CharacterNode {@link Optional<CharacterNode>}
      */
     @SuppressWarnings("checkstyle:IllegalCatch")
-    private static Optional<CharacterNode> getChar(final int i, final int j,  final List<String> map) {
+    private static Optional<CharacterNode> getNodeFromMap(final List<String> map, final int y, final int x) {
         try {
-            final char c = map.get(i).charAt(j);
+            final char c = map.get(y).charAt(x);
             if ((int) c <= ASCII_MAP_SIZE && c != ' ') {
-                return Optional.of(new CharacterNode(j, i, c));
+                return Optional.of(new CharacterNode(y, x, c));
             }
             return Optional.empty();
         } catch (RuntimeException ex) {

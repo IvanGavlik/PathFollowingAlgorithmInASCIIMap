@@ -1,6 +1,9 @@
 package path.follow.algo;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import path.follow.algo.validation.ValidationException;
 
 
 /**
@@ -21,196 +24,54 @@ public class PathInASCIIMapTest {
      * Basic test.
      *
      * Input:
-     *   @---A---+
-     *           |
-     *   x-B-+   C
-     *       |   |
-     *       +---+
      *
      * Output:
-     * Letters ACB
-     * Path as characters @---A---+|C|+---+|+-B-x
+     *
+     * @param pathToInputFile Path to test file {@link String}
+     * @param expectedLetters Expected letters {@link String}
+     * @param expectedPath Expected Path {@link String}
      */
-    @Test
-    public void basic() {
-
+    @ParameterizedTest
+    @CsvSource({
+            "src//test//resources//path//basic.txt, ACB, @---A---+|C|+---+|+-B-x",
+            "src//test//resources//path//intersections.txt, ABCD, @|A+---B--+|+--C-+|-||+---D--+|x",
+            "src//test//resources//path//lettersOnTurns.txt, ACB, @---A---+|||C---+|+-B-x",
+            "src//test//resources//path//letterSameLocation.txt, GOONIES, @-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x",
+            "src//test//resources//path//keepDirection.txt, BLAH, @B+++B|+-L-+A+++A-+Hx",
+    })
+    public void testPaths(final String pathToInputFile, final String expectedLetters, final String expectedPath) {
+        final String[] programArgs = {pathToInputFile};
+        final PathInASCIIMap.MapPath path = PathInASCIIMap.find(programArgs);
+     //   Assertions.assertEquals(expectedLetters, path.getLetters()); // TODO
+        Assertions.assertEquals(expectedPath, path.getPath());
     }
 
+
     /**
-     * Go straight through intersections.
+     * Basic test.
      *
      * Input:
-     *   @
-     *   | +-C--+
-     *   A |    |
-     *   +---B--+
-     *     |      x
-     *     |      |
-     *     +---D--+
      *
      * Output:
-     * Letters ABCD
-     * Path as characters @|A+---B--+|+--C-+|-||+---D--+|x
+     *
+     * @param pathToInputFile Path to test file {@link String}
      */
-    public void intersections() {
+    @ParameterizedTest
+    @CsvSource({
+            "src//test//resources//path//noStart.txt",
+            "src//test//resources//path//noEnd.txt",
+            "src//test//resources//path//multipleStarts.txt",
+            "src//test//resources//path//multipleEnds.txt",
+            "src//test//resources//path//tForks.txt",
+            "src//test//resources//path//brokenPath.txt",
+            "src//test//resources//path//multipleStartingPaths.txt",
+            "src//test//resources//path//fakeTurn.txt",
+    })
+    public void testPathsOnError(final String pathToInputFile) {
+        final String[] programArgs = {pathToInputFile};
+        Assertions.assertThrows(ValidationException.class, () -> {
+            PathInASCIIMap.find(programArgs);
+        });
 
-    }
-
-    /**
-     * letters on turns.
-     *
-     * Input:
-     *   @---A---+
-     *           |
-     *   x-B-+   |
-     *       |   |
-     *       +---C
-     *
-     * Output:
-     * Letters ACB
-     * Path as characters @---A---+|||C---+|+-B-x
-     */
-      public void lettersOnTurns() {
-
-      }
-
-    /**
-     * Do not collect a letter from the same location twice.
-     *
-     * Input:
-     *      +-O-N-+
-     *      |     |
-     *      |   +-I-+
-     *  @-G-O-+ | | |
-     *      | | +-+ E
-     *      +-+     S
-     *              |
-     *              x
-     *
-     * Output:
-     * Letters GOONIES
-     * Path as characters @-G-O-+|+-+|O||+-O-N-+|I|+-+|+-I-+|ES|x
-     */
-    public void letterSameLocation() {
-
-    }
-
-    /**
-     * Keep direction, even in a compact space.
-     *
-     * Input:
-     *  +-L-+
-     *  |  +A-+
-     * @B+ ++ H
-     *  ++    x
-     *
-     *  Output:
-     *  Letters BLAH
-     *  Path as characters @B+++B|+-L-+A+++A-+Hx
-     */
-    public void keepDirection() {
-
-    }
-
-    /**
-     * No start.
-     *
-     * Input;
-     *      -A---+
-     *           |
-     *   x-B-+   C
-     *       |   |
-     *       +---+
-     *
-     * Output:
-     * RuntimeException
-     */
-    public void noStart() {
-
-    }
-
-    /**
-     * No end.
-     *
-     * Input:
-     *    @--A---+
-     *           |
-     *     B-+   C
-     *       |   |
-     *       +---+
-     *
-     * Output:
-     * RuntimeException
-     */
-    public void noEnd() {
-
-    }
-
-    /**
-     * Multiple starts.
-     *
-     * Input:
-     *    @--A-@-+
-     *           |
-     *   x-B-+   C
-     *       |   |
-     *       +---+
-     *
-     * Output:
-     * RuntimeException
-     */
-    public void multipleStarts() {
-
-    }
-
-    /**
-     * Multiple ends.
-     *
-     * Input:
-     *    @--A---+
-     *           |
-     *   x-Bx+   C
-     *       |   |
-     *       +---+
-     *
-     * Output:
-     * RuntimeException
-     */
-    public void multipleEnds() {
-
-    }
-
-    /**
-     * T forks.
-     *
-     * Input
-     *        x-B
-     *           |
-     *    @--A---+
-     *           |
-     *      x+   C
-     *       |   |
-     *       +---+
-     *
-     * Output:
-     * RuntimeException
-     */
-    public void tForks() {
-
-    }
-
-    /**
-     * Broken path.
-     *
-     * Input:
-     *    @--A-+
-     *         |
-     *
-     *         B-x
-     *
-     * Output:
-     * RuntimeException
-     */
-    public void brokenPath() {
     }
 }

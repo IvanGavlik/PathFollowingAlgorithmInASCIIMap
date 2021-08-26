@@ -8,6 +8,8 @@ import path.follow.algo.path.FindPath;
 import path.follow.algo.path.impl.DepthFirstPath;
 import path.follow.algo.validation.Validation;
 import path.follow.algo.validators.MustHaveOneCharacter;
+import path.follow.algo.validators.NoFakeTurn;
+import path.follow.algo.validators.NoMultipleStartingPaths;
 import path.follow.algo.validators.PathIsNotBroken;
 
 
@@ -42,11 +44,9 @@ public final class PathInASCIIMap {
     @SuppressWarnings("checkstyle:Regexp")
     public static void main(final String[] args) {
         final MapPath path = find(args);
-        System.out.print("Letters: ");
-        path.getLetters().forEach(System.out::print);
+        System.out.print("Letters: " + path.getLetters());
         System.out.println();
-        System.out.print("Path as characters: ");
-        path.getPath().forEach(System.out::print);
+        System.out.print("Path as characters: " + path.getPath());
     }
 
     /**
@@ -57,27 +57,28 @@ public final class PathInASCIIMap {
      */
     @SuppressWarnings({"checkstyle:ParameterAssignment", "checkstyle:FinalParameters"})
     public static MapPath find(String[] args) {
-        args = (args == null || args.length < THREE ) ? new String[THREE] : args;
+        args = (args == null || args.length == 0) ? new String[THREE] : args;
 
-        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(args[FIRST_PARAM]);
+        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(getParamOrNull(args, FIRST_PARAM));
         final List<String> asciiMap = asciiMapLoader.load();
 
-        final Character startChar = haveValue(args[SECOND_PARAM]) ?
+        final Character startChar = haveValue(getParamOrNull(args, SECOND_PARAM)) ?
                 getFirstCharacter(args[SECOND_PARAM]) : DEFAULT_START;
-        final Character endChar = haveValue(args[THIRD_PARAM]) ?
+        final Character endChar = haveValue(getParamOrNull(args, THIRD_PARAM)) ?
                 getFirstCharacter(args[THIRD_PARAM]) : DEFAULT_END;
 
         new Validation<>(asciiMap)
                 .add(new MustHaveOneCharacter(startChar))
                 .add(new MustHaveOneCharacter(endChar))
+                .add(new NoMultipleStartingPaths(startChar))
+                .add(new NoFakeTurn())
+                .add(new PathIsNotBroken())
                 .isValidOrElseThrow();
 
         final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, startChar, endChar);
 
+
         final FindPath<CharacterNode> findPath = new DepthFirstPath(graph.getGraph(), graph.getStart());
-        new Validation<>(findPath)
-                .add(new PathIsNotBroken(graph.getEnd()))
-                .isValidOrElseThrow();
 
         final Iterable<CharacterNode> nodePath = findPath.pathTo(graph.getEnd());
 
@@ -88,14 +89,22 @@ public final class PathInASCIIMap {
     }
 
 
+    @SuppressWarnings({"checkstyle:IllegalCatch"})
+    private static String getParamOrNull(final String[] args, final int index) {
+        try {
+            return args[index];
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 
     /**
      * Represents output of program.
      * Output is collected letters on path as characters.
      */
     static final class MapPath {
-        private final List<Character> letters;
-        private final List<Character> path;
+        private final String letters;
+        private final String path;
 
         /**
          * Create new MapPath.
@@ -103,7 +112,7 @@ public final class PathInASCIIMap {
          * @param letters {@link List<Character>}
          * @param path {@link List<Character>}
          */
-        MapPath(final List<Character> letters, final List<Character> path) {
+        MapPath(final String letters, final String path) {
             this.letters = letters;
             this.path = path;
         }
@@ -117,27 +126,30 @@ public final class PathInASCIIMap {
          */
         @SuppressWarnings({"checkstyle:ParameterAssignment", "checkstyle:FinalParameters"})
         MapPath(final Iterable<CharacterNode> nodes, List<Character> exclude) {
-            this.path = new ArrayList<>();
-            this.letters = new ArrayList<>();
-
             if (exclude == null) {
                 exclude = new ArrayList<>();
             }
 
+            final StringBuilder pathBuilder = new StringBuilder();
+            final StringBuilder lettersBuilder = new StringBuilder();
             final List<Character> finalExclude = exclude;
             nodes.forEach(el -> {
-                if ( Character.isLetter(el.getValue()) && !finalExclude.contains(el.getValue())) {
-                    this.letters.add(el.getValue());
+                final Character character = el.getValue();
+                if ( Character.isLetter(character) && !finalExclude.contains(character)) {
+                    lettersBuilder.append(character);
                 }
-                path.add(el.getValue());
+                pathBuilder.append(character);
             });
+
+            this.letters = lettersBuilder.toString();
+            this.path = pathBuilder.toString();
         }
 
-        public List<Character> getLetters() {
+        public String getLetters() {
             return letters;
         }
 
-        public List<Character> getPath() {
+        public String getPath() {
             return path;
         }
 

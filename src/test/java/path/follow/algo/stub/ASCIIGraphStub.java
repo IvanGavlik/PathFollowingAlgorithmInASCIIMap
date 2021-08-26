@@ -43,11 +43,11 @@ public final class ASCIIGraphStub {
     public static List<CharacterNode> getBasicPath() {
         final List<CharacterNode> path = new ArrayList<>();
         path.add(UnidirectionalGraphStub.BASIC_START);
-        path.add(new CharacterNode(1, 0, '-'));
-        path.add(new CharacterNode(2, 0, 'A'));
-        path.add(new CharacterNode(3, 0, '-'));
-        path.add(new CharacterNode(4, 0, '+'));
-        path.add(new CharacterNode(4, 1, '|'));
+        path.add(new CharacterNode(0, 1, '-'));
+        path.add(new CharacterNode(0, 2, 'A'));
+        path.add(new CharacterNode(0, 3, '-'));
+        path.add(new CharacterNode(0, 4, '+'));
+        path.add(new CharacterNode(1, 4, '|'));
         path.add(UnidirectionalGraphStub.BASIC_END);
         return path;
     }
