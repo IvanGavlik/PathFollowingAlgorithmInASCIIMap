@@ -7,8 +7,8 @@ import java.util.Optional;
 
 /**
  *
- * Use this class to apply validators {@link Validator} on valid <DATA>
- * and get result tht indicates is data valid.
+ * Use this class to apply validators {@link Validator} on data <DATA>
+ * and get result that indicates is data valid.
  *
  * @param <DATA>
  *

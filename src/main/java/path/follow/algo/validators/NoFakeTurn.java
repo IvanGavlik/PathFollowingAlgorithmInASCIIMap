@@ -30,7 +30,7 @@ public class NoFakeTurn implements Validator<List<String>> {
         }
 
         /*
-         * For every x char in matrix check
+         * For every + char in matrix check
          * that there is at least one change of direction
          */
         final List<Boolean> eachX = new ArrayList<>();

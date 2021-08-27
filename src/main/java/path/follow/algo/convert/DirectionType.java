@@ -4,7 +4,7 @@ package path.follow.algo.convert;
 /**
  * Represents direction,
  *
- * x and y are used to indicate movement in some direction.
+ * x and y are used to indicate movement  direction.
  * Where x is movement on X Axis and y is movement on Y Axis
  *
  * @author ivan.gavlik

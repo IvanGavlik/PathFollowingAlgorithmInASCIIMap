@@ -36,7 +36,7 @@ public final class DepthFirstPath implements FindPath<CharacterNode> {
     /**
      * Return true if path form source vertex to destination exist.
      *
-     * Source is on creating new FindPath instance
+     * Source is set on creating new FindPath instance
      *
      * @param destination VERTEX
      * @return true if path form source to destination exist.
@@ -53,7 +53,7 @@ public final class DepthFirstPath implements FindPath<CharacterNode> {
     /**
      * Return path from source to destination if exist.
      *
-     * Source is on creating new FindPath instance
+     * Source is set on creating new FindPath instance
      *
      * @param destination VERTEX
      * @return path if exist or empty {@link Iterable}

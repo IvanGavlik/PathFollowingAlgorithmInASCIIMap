@@ -9,7 +9,7 @@ import java.util.Objects;
  * Represents ASCIIGraph.
  *
  * It is unidirectional graph where vertices are {@link CharacterNode}
- * and with explicit access to start vertices and end vertices.
+ * and with explicit access to start end vertices.
  *
  * @author ivan.gavlik
  */
@@ -52,6 +52,12 @@ public final class ASCIIGraph {
         return start;
     }
 
+
+    /**
+     * Get end node.
+     *
+     * @return graph {@link UnidirectionalGraph<CharacterNode>}
+     */
     public CharacterNode getEnd() {
         return end;
     }

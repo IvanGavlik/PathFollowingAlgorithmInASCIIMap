@@ -75,7 +75,6 @@ public final class PathInASCIIMap {
 
         final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, startChar, endChar);
 
-
         final FindPath<CharacterNode> findPath = new DepthFirstPath(graph.getGraph(), graph.getStart());
 
         final Iterable<CharacterNode> nodePath = findPath.pathTo(graph.getEnd());
@@ -83,6 +82,7 @@ public final class PathInASCIIMap {
         final List<Character> excludeStartAndEndCharacter = new ArrayList<>();
         excludeStartAndEndCharacter.add(startChar);
         excludeStartAndEndCharacter.add(endChar);
+        
         return new MapPath(nodePath, excludeStartAndEndCharacter);
     }
 

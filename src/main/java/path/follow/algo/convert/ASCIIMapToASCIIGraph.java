@@ -70,6 +70,7 @@ public final class ASCIIMapToASCIIGraph {
         return nodeStartDirection.get();
     }
 
+    // TODO COMMENTS
     private static void convertUtil(final List<String> map, final UnidirectionalGraph<CharacterNode> graph,
                                     final CharacterNode current, final DirectionType currentDirection,
                                     final CharacterNode finalDestination) {

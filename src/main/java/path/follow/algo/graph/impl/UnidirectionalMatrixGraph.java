@@ -101,7 +101,7 @@ public class UnidirectionalMatrixGraph<VERTEX> implements UnidirectionalGraph<VE
     }
 
     /**
-     *  whether the edge is present or not.
+     *  Whether the edge is present or not.
      *
      * @param source VERTEX
      * @param destination VERTEX

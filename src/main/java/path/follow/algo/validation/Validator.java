@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 public interface Validator<T> extends Predicate<T> {
 
     /**
-     * Get custom msg on validation fail.
+     * Get custom msg when validation fail.
      *
      * @param t validated T
      * @return msg
