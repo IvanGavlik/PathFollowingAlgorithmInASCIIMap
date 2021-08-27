@@ -2,12 +2,10 @@ package path.follow.algo.validators;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import path.follow.algo.graph.vertex.CharacterNode;
-import path.follow.algo.path.FindPath;
-import path.follow.algo.stub.FindPathStub;
-import path.follow.algo.stub.UnidirectionalGraphStub;
+import path.follow.algo.stub.ASCIIMapStub;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests for PathIsNotBroken.
@@ -21,9 +19,18 @@ public class PathIsNotBrokenTest {
      */
     @Test
     public void patNotBroken() {
-        final boolean result =  new PathIsNotBroken(UnidirectionalGraphStub.BASIC_END)
-                .test(FindPathStub.getBasicFindPath());
-        Assertions.assertTrue(result);
+        final List<String> map = new ArrayList<>();
+        map.add("@--+");
+        map.add("   |");
+        map.add("   x");
+        Assertions.assertTrue(new PathIsNotBroken().test(map));
+
+        Assertions.assertTrue(new PathIsNotBroken().test(ASCIIMapStub.getBasicASCIIMap()));
+
+        final List<String> map2 = new ArrayList<>();
+        map2.add("@x");
+        Assertions.assertTrue(new PathIsNotBroken().test(map2));
+
     }
 
     /**
@@ -31,46 +38,38 @@ public class PathIsNotBrokenTest {
      */
     @Test
     public void patBroken() {
-        final boolean result =  new PathIsNotBroken(UnidirectionalGraphStub.BASIC_END)
-                .test(FindPathStub.getBasicBrokenFindPath());
-        Assertions.assertFalse(result);
+        final List<String> map = new ArrayList<>();
+        map.add("-----");
+        map.add("     ");
+        map.add("     x");
+        Assertions.assertFalse(new PathIsNotBroken().test(map));
+
+        final List<String> map2 = new ArrayList<>();
+        map2.add("@- +");
+        Assertions.assertFalse(new PathIsNotBroken().test(map2));
+
+        final List<String> map3 = new ArrayList<>();
+        map3.add("@");
+        map3.add(" ");
+        map3.add("A");
+        Assertions.assertFalse(new PathIsNotBroken().test(map3));
+
+
+        final List<String> map4 = new ArrayList<>();
+        map4.add("@--A-+");
+        map4.add("     |");
+        map4.add("      ");
+        map4.add("      B-x");
+        Assertions.assertFalse(new PathIsNotBroken().test(map4));
     }
 
     /**
-     * Test on null.
+     * Test on invalid input.
      */
     @Test
-    public void onNull() {
-        Assertions.assertThrows(IllegalArgumentException.class,
-                () -> new PathIsNotBroken(null).test(FindPathStub.getBasicBrokenFindPath()));
-
-        final boolean result =  new PathIsNotBroken(UnidirectionalGraphStub.BASIC_END)
-                .test(null);
-        Assertions.assertFalse(result);
+    public void onInvalidInput() {
+        Assertions.assertFalse(new PathIsNotBroken().test(null));
+        Assertions.assertTrue(new PathIsNotBroken().test(new ArrayList<>()));
     }
 
-    /**
-     * Test on empty.
-     */
-    @Test
-    public void onEmpty() {
-
-        @SuppressWarnings("checkstyle:JavadocType")
-        class FindPathEmpty implements FindPath<CharacterNode> {
-
-            @Override
-            public boolean hasPathTo(final CharacterNode node) {
-                return false;
-            }
-
-            @Override
-            public Iterable<CharacterNode> pathTo(final CharacterNode node) {
-                return new ArrayList<>();
-            }
-        }
-
-        final boolean result =  new PathIsNotBroken(UnidirectionalGraphStub.BASIC_END)
-                .test(new FindPathEmpty());
-        Assertions.assertFalse(result);
-    }
 }

@@ -30,7 +30,7 @@ public final class ValidatorStub {
 
             @Override
             public String getMsgOnFail(final String s) {
-                return "There is no " + c + " in " + s;
+                return c + "is not in " + s;
             }
 
             @Override

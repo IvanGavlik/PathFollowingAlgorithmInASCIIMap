@@ -86,7 +86,7 @@ public interface UnidirectionalGraph<VERTEX> {
     int getEdgesCount();
 
     /**
-     * Whether the vertex is present or not.
+     * Is the vertex is present or not.
      *
      * @param vertex VERTEX
      * @return true if has vertex
@@ -94,7 +94,7 @@ public interface UnidirectionalGraph<VERTEX> {
     boolean hasVertex(VERTEX vertex);
 
     /**
-     *  whether the edge is present or not.
+     * Is the edge is present or not.
      *
      * @param source VERTEX
      * @param destination VERTEX

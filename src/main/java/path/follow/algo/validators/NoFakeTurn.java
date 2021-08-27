@@ -3,6 +3,7 @@ package path.follow.algo.validators;
 import path.follow.algo.validation.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Validate that + does not have fake turns.
@@ -15,6 +16,7 @@ import java.util.List;
 public class NoFakeTurn implements Validator<List<String>> {
 
     private static final char TURN_CHAR = '+';
+    private static final int AT_LEST_TWO_IS_NEEDED_FOR_PATH = 2;
 
     @Override
     public String getMsgOnFail(final List<String> map) {
@@ -25,13 +27,17 @@ public class NoFakeTurn implements Validator<List<String>> {
     @SuppressWarnings("checkstyle:CyclomaticComplexity")
     public boolean test(final List<String> map) {
 
-        if (map == null || map.isEmpty()) {
+        if (Objects.isNull(map)) {
             return false;
+        }
+
+        if (map.stream().flatMapToInt(el -> el.chars()).count()  < AT_LEST_TWO_IS_NEEDED_FOR_PATH) {
+            return true;
         }
 
         /*
          * For every + char in matrix check
-         * that there is at least one change of direction
+         * that is at least one change of direction
          */
         final List<Boolean> eachX = new ArrayList<>();
         for (int i = 0; i < map.size(); i++) {

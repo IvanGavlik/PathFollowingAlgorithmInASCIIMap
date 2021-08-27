@@ -13,7 +13,11 @@ import path.follow.algo.validators.NoMultipleStartingPaths;
 import path.follow.algo.validators.PathIsNotBroken;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.LinkedHashSet;
+import java.util.Objects;
 
 import static path.follow.algo.util.Util.getFirstCharacter;
 import static path.follow.algo.util.Util.haveValue;
@@ -82,7 +86,7 @@ public final class PathInASCIIMap {
         final List<Character> excludeStartAndEndCharacter = new ArrayList<>();
         excludeStartAndEndCharacter.add(startChar);
         excludeStartAndEndCharacter.add(endChar);
-        
+
         return new MapPath(nodePath, excludeStartAndEndCharacter);
     }
 
@@ -139,7 +143,7 @@ public final class PathInASCIIMap {
                 pathBuilder.append(character);
             });
 
-            StringBuilder lettersBuilder = new StringBuilder();
+            final StringBuilder lettersBuilder = new StringBuilder();
             unieqeLetters.forEach(el -> {
                 lettersBuilder.append(el.getValue());
             });

@@ -92,7 +92,7 @@ public class ASCIIMapToASCIIGraphTest {
     }
 
     /**
-     * Test when empty start or end character do not exist in ASCIIMap
+     * Test when empty start or end character do not exist in ASCIIMap.
      *
      * Input
      * empty ASCIIMap
