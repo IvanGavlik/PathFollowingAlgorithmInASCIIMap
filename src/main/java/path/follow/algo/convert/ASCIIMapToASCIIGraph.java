@@ -58,9 +58,9 @@ public final class ASCIIMapToASCIIGraph {
         throw new IllegalArgumentException("Character does't exist in map" + character);
     }
 
-    private static DirectionType getStartDirection(final List<String> map, final CharacterNode node) {
+    private static Direction getStartDirection(final List<String> map, final CharacterNode node) {
 
-        final Optional<DirectionType> nodeStartDirection = Stream.of(DirectionType.values())
+        final Optional<Direction> nodeStartDirection = Stream.of(Direction.values())
                 .filter(el -> getNodeFromMap(map, getYMove(node, el), getXMove(node, el)).isPresent())
                 .findFirst();
 
@@ -70,9 +70,29 @@ public final class ASCIIMapToASCIIGraph {
         return nodeStartDirection.get();
     }
 
-    // TODO COMMENTS
+    /**
+     *  Recursive function converts ASCII map into Unidirectional graph.
+     *
+     *  Algorithm.
+     *  By using currentDirection and current Node finds next node and next direction.
+     *  Add edge in map on relation current - next node
+     *  Calls itself and as parameter for current Node sets next node
+     *  and for current direction sets next direction.
+     *  It calls itself until final destination is not found or path is broken.
+     *
+     *  Next direction depends on current node and current direction.
+     *  It will continue in same direction, but if current node is + or letter
+     *  it will try change direction.
+     *
+     *
+     * @param map ASCII map input
+     * @param graph {@link UnidirectionalGraph<CharacterNode>} result
+     * @param current starting point in ASCII map {@link CharacterNode}
+     * @param currentDirection {@link Direction}
+     * @param finalDestination {@link CharacterNode}
+     */
     private static void convertUtil(final List<String> map, final UnidirectionalGraph<CharacterNode> graph,
-                                    final CharacterNode current, final DirectionType currentDirection,
+                                    final CharacterNode current, final Direction currentDirection,
                                     final CharacterNode finalDestination) {
         if (current.equals(finalDestination)) {
             return;
@@ -88,7 +108,7 @@ public final class ASCIIMapToASCIIGraph {
         graph.addEdge(current, next);
 
         final Optional<?> nextDirectionOptional =
-                 Stream.of(DirectionType.getDirectionsForChar(currentDirection, next.getValue()))
+                 Stream.of(Direction.getDirectionsForChar(currentDirection, next.getValue()))
                 .map(direction -> {
                     final Optional<CharacterNode> tempNext =
                             getNodeFromMap(map, getYMove(next, direction), getXMove(next, direction));
@@ -106,21 +126,21 @@ public final class ASCIIMapToASCIIGraph {
         if (!nextDirectionOptional.isPresent()) {
             return;
         }
-        if (!(nextDirectionOptional.get() instanceof DirectionType)) {
+        if (!(nextDirectionOptional.get() instanceof Direction)) {
             // this should never happen
             throw new ClassCastException("nextDirectionOptional#get must be DirectionType");
         }
-        final DirectionType nextDirection = (DirectionType) nextDirectionOptional.get();
+        final Direction nextDirection = (Direction) nextDirectionOptional.get();
 
         convertUtil(map, graph, next, nextDirection, finalDestination);
 
     }
 
-    private static int getXMove(final CharacterNode n, final DirectionType directionType) {
+    private static int getXMove(final CharacterNode n, final Direction directionType) {
         return n.getX() + directionType.getX();
     }
 
-    private static int getYMove(final CharacterNode n, final DirectionType directionType) {
+    private static int getYMove(final CharacterNode n, final Direction directionType) {
         return n.getY() + directionType.getY();
     }
 

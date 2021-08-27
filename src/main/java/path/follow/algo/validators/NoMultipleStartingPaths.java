@@ -1,6 +1,6 @@
 package path.follow.algo.validators;
 
-import path.follow.algo.convert.DirectionType;
+import path.follow.algo.convert.Direction;
 import path.follow.algo.validation.Validator;
 
 
@@ -50,7 +50,7 @@ public class NoMultipleStartingPaths implements Validator<List<String>> {
             for (int j = 0; j < map.get(i).length(); j++) {
                 if (start == map.get(i).charAt(j)) {
 
-                   for (DirectionType d: DirectionType.values()) {
+                   for (Direction d: Direction.values()) {
                        try {
                            final char c = map.get(i + d.getY()).charAt(j + d.getX());
                            if ( c != ' ') {

@@ -4,12 +4,12 @@ package path.follow.algo.convert;
 /**
  * Represents direction,
  *
- * x and y are used to indicate movement  direction.
+ * x and y are used to indicate movement.
  * Where x is movement on X Axis and y is movement on Y Axis
  *
  * @author ivan.gavlik
  */
-public enum DirectionType { // todo RENAME Direction
+public enum Direction {
     /**
      * Move right one step.
      */
@@ -39,7 +39,7 @@ public enum DirectionType { // todo RENAME Direction
      * @param x X Axis
      * @param y Y Axis
      */
-    DirectionType(final int y, final int x) {
+    Direction(final int y, final int x) {
         this.y = y;
         this.x = x;
     }
@@ -68,16 +68,16 @@ public enum DirectionType { // todo RENAME Direction
      * @param directionType Direction
      * @return list of Directions where current direction on Axis is returned first and opposite directions last.
      */
-    private static DirectionType[] keepDirectionFirst(final DirectionType directionType) {
+    private static Direction[] keepDirectionFirst(final Direction directionType) {
         switch (directionType) {
             case TOP:
-                return new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM, DirectionType.RIGHT, DirectionType.LEFT};
+                return new Direction[]{Direction.TOP, Direction.BOTTOM, Direction.RIGHT, Direction.LEFT};
             case BOTTOM:
-                return new DirectionType[]{DirectionType.BOTTOM, DirectionType.TOP, DirectionType.RIGHT, DirectionType.LEFT};
+                return new Direction[]{Direction.BOTTOM, Direction.TOP, Direction.RIGHT, Direction.LEFT};
             case RIGHT:
-                return new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT, DirectionType.TOP, DirectionType.BOTTOM};
+                return new Direction[]{Direction.RIGHT, Direction.LEFT, Direction.TOP, Direction.BOTTOM};
             case LEFT:
-                return new DirectionType[]{DirectionType.RIGHT, DirectionType.LEFT, DirectionType.TOP, DirectionType.BOTTOM};
+                return new Direction[]{Direction.LEFT, Direction.RIGHT, Direction.TOP, Direction.BOTTOM};
             default:
                 throw new IllegalArgumentException();
         }
@@ -87,18 +87,18 @@ public enum DirectionType { // todo RENAME Direction
      * Change direction.
      *
      * @param directionType Direction
-     * @return list of Directions where current direction on Axis is returned last, and opposite directions first
+     * @return list of Directions where opposite directions is returned first.
      */
-    private static DirectionType[] changedDirectionsFirst(final DirectionType directionType) {
+    private static Direction[] changedDirectionsFirst(final Direction directionType) {
         switch (directionType) {
             case TOP:
-                return new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT, DirectionType.TOP, DirectionType.BOTTOM};
+                return new Direction[]{Direction.LEFT, Direction.RIGHT, Direction.TOP, Direction.BOTTOM};
             case BOTTOM:
-                return new DirectionType[]{DirectionType.LEFT, DirectionType.RIGHT, DirectionType.BOTTOM, DirectionType.TOP};
+                return new Direction[]{Direction.LEFT, Direction.RIGHT, Direction.BOTTOM, Direction.TOP};
             case RIGHT:
-                return new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM, DirectionType.RIGHT, DirectionType.LEFT};
+                return new Direction[]{Direction.TOP, Direction.BOTTOM, Direction.RIGHT, Direction.LEFT};
             case LEFT:
-                return new DirectionType[]{DirectionType.TOP, DirectionType.BOTTOM, DirectionType.LEFT, DirectionType.RIGHT};
+                return new Direction[]{Direction.TOP, Direction.BOTTOM, Direction.LEFT, Direction.RIGHT};
             default:
                 throw new IllegalArgumentException();
         }
@@ -109,11 +109,11 @@ public enum DirectionType { // todo RENAME Direction
      *
      * If passed character is letter or + change current direction, else continue on same direction.
      *
-     * @param directionType current {@link DirectionType}
+     * @param directionType current {@link Direction}
      * @param character Character
      * @return directions for passed character
      */
-    public static DirectionType[] getDirectionsForChar(final DirectionType directionType, final Character character) {
+    public static Direction[] getDirectionsForChar(final Direction directionType, final Character character) {
         if (character == null) {
             throw new IllegalArgumentException("Character is null");
         }
@@ -123,7 +123,7 @@ public enum DirectionType { // todo RENAME Direction
         if  (Character.isLetter(character)) {
             return keepDirectionFirst(directionType);
         }
-        return new DirectionType[]{directionType};
+        return new Direction[]{directionType};
     }
 
 }

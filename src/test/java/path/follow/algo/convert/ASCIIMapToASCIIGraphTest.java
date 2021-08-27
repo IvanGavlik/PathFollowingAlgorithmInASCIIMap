@@ -20,14 +20,12 @@ public class ASCIIMapToASCIIGraphTest {
     /**
      * Test basic ASCIi map.
      *
-     * Have all elements important for control flow and bossiness logic.
-     *
      * Input:
      * ASCIi map that contains
      * @ - start character
      * x - end character
      * + - try changer direction
-     * A - try change direction
+     * A - try changer direction
      * | - keep direction
      * - - keep direction
      *
@@ -90,6 +88,29 @@ public class ASCIIMapToASCIIGraphTest {
     public void testEmpty() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             ASCIIMapToASCIIGraph.convert(new ArrayList<String>(), '@', 'x');
+        });
+    }
+
+    /**
+     * Test when empty start or end character do not exist in ASCIIMap
+     *
+     * Input
+     * empty ASCIIMap
+     * not existing start Character
+     * not existing end Character
+     *
+     * Output
+     * {@link IllegalArgumentException}
+     */
+    @Test
+    @SuppressWarnings("checkstyle:MagicNumber")
+    public void noStartNoEndCharacter() {
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), 'Z', 'x');
+        });
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), '@', '%');
         });
     }
 
