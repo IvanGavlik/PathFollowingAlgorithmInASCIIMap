@@ -12,15 +12,13 @@ import path.follow.algo.validators.NoFakeTurn;
 import path.follow.algo.validators.NoMultipleStartingPaths;
 import path.follow.algo.validators.PathIsNotBroken;
 
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
-import static path.follow.algo.util.Util.getFirstCharacter;
-import static path.follow.algo.util.Util.haveValue;
 
 /**
  * App - starts application.
@@ -28,13 +26,6 @@ import static path.follow.algo.util.Util.haveValue;
  * @author ivan.gavlik
  */
 public final class PathInASCIIMap {
-
-    private static final int FIRST_PARAM = 0;
-    private static final int SECOND_PARAM = 1;
-    private static final int THIRD_PARAM = 2;
-    private static final int THREE = 3;
-    private static final Character DEFAULT_START = '@';
-    private static final Character DEFAULT_END = 'x';
 
     private PathInASCIIMap() { }
 
@@ -59,45 +50,31 @@ public final class PathInASCIIMap {
      */
     @SuppressWarnings({"checkstyle:ParameterAssignment", "checkstyle:FinalParameters"})
     public static MapPath find(String[] args) {
-        args = (args == null || args.length == 0) ? new String[THREE] : args;
 
-        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(getParamOrNull(args, FIRST_PARAM));
+        final ProgramInput input = new ProgramInput(args);
+
+        final ASCIIMapLoader asciiMapLoader = ASCIIMapLoader.getInstance(input.getFile());
         final List<String> asciiMap = asciiMapLoader.load();
 
-        final Character startChar = haveValue(getParamOrNull(args, SECOND_PARAM)) ?
-                getFirstCharacter(args[SECOND_PARAM]) : DEFAULT_START;
-        final Character endChar = haveValue(getParamOrNull(args, THIRD_PARAM)) ?
-                getFirstCharacter(args[THIRD_PARAM]) : DEFAULT_END;
-
         new Validation<>(asciiMap)
-                .add(new MustHaveOneCharacter(startChar))
-                .add(new MustHaveOneCharacter(endChar))
-                .add(new NoMultipleStartingPaths(startChar))
+                .add(new MustHaveOneCharacter(input.getStart()))
+                .add(new MustHaveOneCharacter(input.getEnd()))
+                .add(new NoMultipleStartingPaths(input.getStart()))
                 .add(new NoFakeTurn())
                 .add(new PathIsNotBroken())
                 .isValidOrElseThrow();
 
-        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, startChar, endChar);
+        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(asciiMap, input.getStart(), input.getEnd());
 
         final FindPath<CharacterNode> findPath = new DepthFirstPath(graph.getGraph(), graph.getStart());
 
         final Iterable<CharacterNode> nodePath = findPath.pathTo(graph.getEnd());
 
         final List<Character> excludeStartAndEndCharacter = new ArrayList<>();
-        excludeStartAndEndCharacter.add(startChar);
-        excludeStartAndEndCharacter.add(endChar);
+        excludeStartAndEndCharacter.add(input.getStart());
+        excludeStartAndEndCharacter.add(input.getEnd());
 
         return new MapPath(nodePath, excludeStartAndEndCharacter);
-    }
-
-
-    @SuppressWarnings({"checkstyle:IllegalCatch"})
-    private static String getParamOrNull(final String[] args, final int index) {
-        try {
-            return args[index];
-        } catch (Exception ex) {
-            return null;
-        }
     }
 
     /**
@@ -144,9 +121,7 @@ public final class PathInASCIIMap {
             });
 
             final StringBuilder lettersBuilder = new StringBuilder();
-            unieqeLetters.forEach(el -> {
-                lettersBuilder.append(el.getValue());
-            });
+            unieqeLetters.forEach(el -> lettersBuilder.append(el.getValue()));
 
             this.letters = lettersBuilder.toString();
             this.path = pathBuilder.toString();
@@ -187,4 +162,98 @@ public final class PathInASCIIMap {
         }
     }
 
+    /**
+     * Represents input of program.
+     * Can have zero, one, two or three params
+     * -f X for file path (default: lod internal map)
+     * -s X for start char (default: @)
+     * -e X for end char (default: x)
+     *
+     * if param is omitted default is used
+     * -s and -e for value can not have + (it marks change or direction in map)
+     *
+     * Example 1.
+     * -f //documents//map//basic.txt -s % -e #
+     * Loads maps from file /documents//map//basic.txt, start char is % end char is #
+     *
+     * Example 2.
+     * -f //documents//map//basic.txt -e #
+     * Loads maps from file /documents//map//basic.txt, start char is @ (default) end char is #
+     *
+     * Example 3.
+     *  -s $ -e #
+     * Loads default map, start char is $ end char is #.
+     * Default map only have path from @ and x so other params will not find any path.
+     *
+     */
+    static final class ProgramInput {
+        private static final String FILE_PARAM = "-f";
+        private static final String START_CHAR_PARAM = "-s";
+        private static final String END_CHAR_PARAM = "-e";
+
+        private static final Character DEFAULT_START = '@';
+        private static final Character DEFAULT_END = 'x';
+
+
+        private String file;
+        private Character start;
+        private Character end;
+
+        /**
+         * Create new instance of {@link ProgramInput}.
+         *
+         * @param args {@link String[])
+         */
+        @SuppressWarnings({"checkstyle:MagicNumber"})
+        ProgramInput(final String[] args) {
+            if (Objects.isNull(args) || args.length == 0) {
+                file = null;
+                start = DEFAULT_START;
+                end = DEFAULT_END;
+            }
+            for (int i = 0; i < args.length; i += 2) {
+                final String input = args[i];
+                switch (input) {
+                    case FILE_PARAM:
+                        file = getValueAt(args, i + 1)
+                                .orElseThrow(IllegalArgumentException::new);
+                        break;
+                    case START_CHAR_PARAM:
+                        start = getValueAt(args, i + 1)
+                                .map(el -> el.charAt(0))
+                                .orElseThrow(IllegalArgumentException::new);
+                        break;
+                    case END_CHAR_PARAM:
+                        end = getValueAt(args, i + 1)
+                            .map( el -> el.charAt(0))
+                            .orElseThrow(IllegalArgumentException::new);
+                        break;
+                    default:
+                        throw new IllegalArgumentException();
+                }
+            }
+        }
+
+        @SuppressWarnings({"checkstyle:IllegalCatch"})
+        private Optional<String> getValueAt(final String[] args, final int index) {
+            try {
+                return Optional.of(args[index]);
+            } catch (Exception ex) {
+                return Optional.empty();
+            }
+        }
+
+
+        public String getFile() {
+            return this.file;
+        }
+
+        public Character getStart() {
+            return this.start != null ? this.start : DEFAULT_START;
+        }
+
+        public Character getEnd() {
+            return this.end != null ? this.end : DEFAULT_END;
+        }
+    }
 }
