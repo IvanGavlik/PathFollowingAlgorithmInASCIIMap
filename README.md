@@ -1,11 +1,11 @@
-# Path following algorithm in ASCII Map
+# Path following algorithm for ASCII Map
 
 Problem description [here](https://github.com/softwaresauna/code-challenge)
 
 ## Solution  
 
-Program takes ASCII map as an input, finds the position of character @. 
-Then follows the path and stops when character x is reached. 
+Program takes ASCII map as an input, finds the position of start character. 
+Then follows the path and stops when end character is reached. 
 
 Program will output
 * Collected letters (The letters form the same location will not be collected)
@@ -25,20 +25,39 @@ The Program has three layers
 Each layer has own interface and they implementations are well tested.
 
 Application uses method factories to instantiate particular interface implementation 
-Example: Input from file can be replaced with input from console.   
+Example: Input from terminal can be replaced with default input.   
 
-## Star tests
+## Run tests
 
-## Start application
+run `mvn test`
+
+## Run application
+
+First you need to package application. Run `mvn clean package` 
+
+Then run `java -jar target/path-find.jar`
+
+### How pass optional arguments
+
+-f for file path 
+-s start character
+-e end character 
+
+Example
+
+`java -jar target/path-find.jar -f src/test/resources/path/intersections.txt -s @ -e x`
+
+It loads file form `src/test/resources/path/intersections.txt` start character is set to @
+and end character is set to x
 
 ### User guide
 
-### Docs
+It is in user-guide/PathFollowingAlgorithmASCIIMap.pdf
 
-TODO 
-- testovi za ovo što imam
-- validacija
-- logiranje ? 
-- read me
-- upute 
+## Author
+
+Name: Ivan Gavlik
+
+Contact info ivangavlik963@gmail.com
+
 

@@ -28,7 +28,7 @@ public class MustHaveOneCharacter implements Validator<List<String>> {
     public String getMsgOnFail(final List<String> map) {
         final StringBuilder sb = new StringBuilder("Map ");
         sb.append(map)
-                .append(" doest not have one ")
+                .append(" does not have one ")
                 .append(value);
 
         return sb.toString();

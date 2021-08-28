@@ -4,9 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>pathFollowingAlgorithm</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>org.gavlik</groupId>
+    <artifactId>find-path</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>1.8</java.version>
@@ -40,6 +41,9 @@
     </dependencies>
 
     <build>
+
+        <finalName> path-find </finalName>
+
         <plugins>
 
             <plugin>
@@ -52,6 +56,19 @@
                     <source>${java.version}</source>
                     <target>${java.version}</target>
                     <showDeprecation>true</showDeprecation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>path.follow.algo.PathInASCIIMap</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
 
