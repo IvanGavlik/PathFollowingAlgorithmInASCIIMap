@@ -25,7 +25,7 @@ public class PathIsNotBrokenTest {
         map.add("   x");
         Assertions.assertTrue(new PathIsNotBroken().test(map));
 
-        Assertions.assertTrue(new PathIsNotBroken().test(ASCIIMapStub.getBasicASCIIMap()));
+        Assertions.assertTrue(new PathIsNotBroken().test(ASCIIMapStub.getBasicASCIIMap().getMap()));
 
         final List<String> map2 = new ArrayList<>();
         map2.add("@x");

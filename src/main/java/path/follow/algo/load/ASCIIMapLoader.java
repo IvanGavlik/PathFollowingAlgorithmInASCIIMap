@@ -1,10 +1,11 @@
 package path.follow.algo.load;
 
-import path.follow.algo.load.impl.FileASCIIMapLoader;
-import path.follow.algo.load.impl.InternalASCIIMapLoader;
-import path.follow.algo.util.Util;
 
-import java.util.List;
+import path.follow.algo.load.impl.InternalASCIIMapLoader;
+import path.follow.algo.load.impl.TerminalASCIIMapLoader;
+
+import java.util.Objects;
+
 
 /**
  * Loader for ASCII map.
@@ -13,27 +14,28 @@ import java.util.List;
  */
 public interface ASCIIMapLoader {
 
+
     /**
      * Load data from input.
      *
-     * @return List<String> where each row in map is element in List.
+     * @return {@link ASCIIMap}
      * @throws IllegalStateException if load fails.
      */
-    List<String> load() throws IllegalStateException;
+    ASCIIMap load() throws IllegalStateException;
 
     /**
      * Create new ASCIIMapLoader.
      *
      * If file path is null method returns default implementation {@link InternalASCIIMapLoader}.
      *
-     * @param filePath path to the file
+     * @param args arguments
      * @return loader for ASCII map {@link ASCIIMapLoader}
      */
-    static ASCIIMapLoader getInstance(final String filePath) {
-        if (!Util.haveValue(filePath)) {
+    static ASCIIMapLoader getInstance(final String[] args) {
+        if (Objects.isNull(args) || args.length == 0) {
             return new InternalASCIIMapLoader();
         }
-        return new FileASCIIMapLoader(filePath);
+        return new TerminalASCIIMapLoader(args);
     }
 
 }

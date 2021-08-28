@@ -4,10 +4,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import path.follow.algo.graph.UnidirectionalGraph;
 import path.follow.algo.graph.vertex.CharacterNode;
+import path.follow.algo.load.ASCIIMap;
 import path.follow.algo.stub.ASCIIMapStub;
 import path.follow.algo.stub.UnidirectionalGraphStub;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Tests for {@link ASCIIMapToASCIIGraph}.
@@ -37,12 +39,10 @@ public class ASCIIMapToASCIIGraphTest {
      */
     @Test
     public void basic() {
-        final Character startChar = '@';
-        final Character endChar = 'x';
-        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap() , startChar, endChar);
+        final ASCIIGraph graph = ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap());
 
-        Assertions.assertEquals(startChar, graph.getStart().getValue());
-        Assertions.assertEquals(endChar, graph.getEnd().getValue());
+        Assertions.assertEquals(ASCIIMap.DEFAULT_START, graph.getStart().getValue());
+        Assertions.assertEquals(ASCIIMap.DEFAULT_END, graph.getEnd().getValue());
         final UnidirectionalGraph<CharacterNode> expectedGraph = UnidirectionalGraphStub.getBasicASCIIGraph();
         Assertions.assertEquals(expectedGraph.getEdgesCount(), graph.getGraph().getEdgesCount());
         Assertions.assertEquals(expectedGraph.getVertexCount(), graph.getGraph().getVertexCount());
@@ -50,10 +50,10 @@ public class ASCIIMapToASCIIGraphTest {
     }
 
     /**
-     * Test when null is passed.
+     * Test when null is passed in {@link ASCIIMap}.
      *
      * Input
-     * one of params is null
+     * one of values in {@link ASCIIMap} is null
      *
      * Output
      * {@link IllegalArgumentException}
@@ -61,15 +61,73 @@ public class ASCIIMapToASCIIGraphTest {
     @Test
     public void testNull() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(null, '@', 'X');
+            @SuppressWarnings({"checkstyle:JavadocType"})
+            class ASCIIMapImplementation implements ASCIIMap {
+
+                @Override
+                public List<String> getMap() {
+                    return null;
+                }
+
+                @Override
+                public Character getStart() {
+                    return DEFAULT_START;
+                }
+
+                @Override
+                public Character getEnd() {
+                    return DEFAULT_END;
+                }
+            }
+            final ASCIIMap map = new ASCIIMapImplementation();
+            ASCIIMapToASCIIGraph.convert(map);
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), null, 'X');
+            @SuppressWarnings({"checkstyle:JavadocType"})
+            class ASCIIMapImplementation implements ASCIIMap {
+
+                @Override
+                public List<String> getMap() {
+                    return new ArrayList<>();
+                }
+
+                @Override
+                public Character getStart() {
+                    return null;
+                }
+
+                @Override
+                public Character getEnd() {
+                    return DEFAULT_END;
+                }
+            }
+            final ASCIIMap map = new ASCIIMapImplementation();
+            ASCIIMapToASCIIGraph.convert(map);
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), '@', null);
+            @SuppressWarnings({"checkstyle:JavadocType"})
+            class ASCIIMapImplementation implements ASCIIMap {
+
+                @Override
+                public List<String> getMap() {
+                    return new ArrayList<>();
+                }
+
+                @Override
+                public Character getStart() {
+                    return DEFAULT_START;
+                }
+
+                @Override
+                public Character getEnd() {
+                    return null;
+                }
+            }
+
+            final ASCIIMap map = new ASCIIMapImplementation();
+            ASCIIMapToASCIIGraph.convert(map);
         });
     }
 
@@ -87,7 +145,27 @@ public class ASCIIMapToASCIIGraphTest {
     @SuppressWarnings("checkstyle:MagicNumber")
     public void testEmpty() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(new ArrayList<String>(), '@', 'x');
+            @SuppressWarnings({"checkstyle:JavadocType"})
+            class ASCIIMapImplementation implements ASCIIMap {
+
+                @Override
+                public List<String> getMap() {
+                    return new ArrayList<>();
+                }
+
+                @Override
+                public Character getStart() {
+                    return DEFAULT_START;
+                }
+
+                @Override
+                public Character getEnd() {
+                    return DEFAULT_END;
+                }
+            }
+
+            final ASCIIMap map = new ASCIIMapImplementation();
+            ASCIIMapToASCIIGraph.convert(map);
         });
     }
 
@@ -106,11 +184,51 @@ public class ASCIIMapToASCIIGraphTest {
     @SuppressWarnings("checkstyle:MagicNumber")
     public void noStartNoEndCharacter() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), 'Z', 'x');
+            @SuppressWarnings({"checkstyle:JavadocType"})
+            class ASCIIMapImplementation implements ASCIIMap {
+
+                @Override
+                public List<String> getMap() {
+                    return ASCIIMapStub.getBasicASCIIMap().getMap();
+                }
+
+                @Override
+                public Character getStart() {
+                    return 'Z';
+                }
+
+                @Override
+                public Character getEnd() {
+                    return DEFAULT_END;
+                }
+            }
+
+            final ASCIIMap map = new ASCIIMapImplementation();
+            ASCIIMapToASCIIGraph.convert(map);
         });
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            ASCIIMapToASCIIGraph.convert(ASCIIMapStub.getBasicASCIIMap(), '@', '%');
+            @SuppressWarnings({"checkstyle:JavadocType"})
+            class ASCIIMapImplementation implements ASCIIMap {
+
+                @Override
+                public List<String> getMap() {
+                    return ASCIIMapStub.getBasicASCIIMap().getMap();
+                }
+
+                @Override
+                public Character getStart() {
+                    return DEFAULT_START;
+                }
+
+                @Override
+                public Character getEnd() {
+                    return '%';
+                }
+            }
+
+            final ASCIIMap map = new ASCIIMapImplementation();
+            ASCIIMapToASCIIGraph.convert(map);
         });
     }
 

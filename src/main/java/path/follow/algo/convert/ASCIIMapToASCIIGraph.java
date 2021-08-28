@@ -3,6 +3,7 @@ package path.follow.algo.convert;
 
 import path.follow.algo.graph.UnidirectionalGraph;
 import path.follow.algo.graph.vertex.CharacterNode;
+import path.follow.algo.load.ASCIIMap;
 
 import java.util.List;
 import java.util.Optional;
@@ -26,23 +27,21 @@ public final class ASCIIMapToASCIIGraph {
      * Space are ignored.
      *
      *
-     * @param map ASCIIMap  {@link List<String>} where each row in map in one element in list.
-     * @param start {@link Character}
-     * @param end {@link Character}
+     * @param asciiMap ASCIIMap  {@link ASCIIMap}
      * @return {@link ASCIIGraph}
      */
-    public static ASCIIGraph convert(final List<String> map, final Character start, final Character end) {
-        if (map == null || start == null || end == null) {
-            throw new IllegalArgumentException("map " + map + " start " + start + " end " + end);
+    public static ASCIIGraph convert(final ASCIIMap asciiMap) {
+        if (asciiMap.getMap() == null || asciiMap.getStart() == null || asciiMap.getEnd() == null) {
+            throw new IllegalArgumentException("map " + asciiMap.getMap() + " start " + asciiMap.getStart() + " end " + asciiMap.getEnd());
         }
 
         final UnidirectionalGraph<CharacterNode> graph =
                 UnidirectionalGraph.getInstance(UnidirectionalGraph.GraphInstance.MATRIX);
 
-        final CharacterNode startNode = getNodeFromMap(map, start);
-        final CharacterNode destinationNode = getNodeFromMap(map, end);
+        final CharacterNode startNode = getNodeFromMap(asciiMap.getMap(), asciiMap.getStart());
+        final CharacterNode destinationNode = getNodeFromMap(asciiMap.getMap(), asciiMap.getEnd());
 
-        convertUtil(map, graph, startNode, getStartDirection(map, startNode), destinationNode);
+        convertUtil(asciiMap.getMap(), graph, startNode, getStartDirection(asciiMap.getMap(), startNode), destinationNode);
 
         return new ASCIIGraph(graph, startNode, destinationNode);
     }
