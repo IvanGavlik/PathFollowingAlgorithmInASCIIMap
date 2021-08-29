@@ -1,4 +1,4 @@
-# Path following algorithm for ASCII Map
+# Path following algorithm in ASCII Map
 
 Problem description [here](https://github.com/softwaresauna/code-challenge)
 
@@ -8,7 +8,7 @@ Program takes ASCII map as an input, finds the position of start character.
 Then follows the path and stops when end character is reached. 
 
 Program will output
-* Collected letters (The letters form the same location will not be collected)
+* Collected letters (The letter  from the same location will not be collected)
 * Path as characters
 * Error with msg if something is wrong
 
