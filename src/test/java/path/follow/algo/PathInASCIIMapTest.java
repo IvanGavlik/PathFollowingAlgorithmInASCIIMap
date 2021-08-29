@@ -104,4 +104,19 @@ public class PathInASCIIMapTest {
         });
 
     }
+
+    /**
+     * Two directions
+     */
+    @ParameterizedTest
+    @CsvSource({
+            "src/test/resources/twoDirections.txt",
+    })
+    public void twoDirections(final String pathToInputFile) {
+        final String[] programArgs = {"-f", pathToInputFile};
+        final PathInASCIIMap.MapPath path = PathInASCIIMap.find(programArgs);
+        Assertions.assertEquals("AB", path.getLetters());
+        Assertions.assertEquals("@---A---+|+--B---+||x", path.getPath());
+
+    }
 }

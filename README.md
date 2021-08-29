@@ -37,7 +37,7 @@ First you need to package application. Run `mvn clean package`
 
 Then run `java -jar target/path-find.jar`
 
-### How pass optional arguments
+### How to pass optional arguments
 
 -f for file path 
 -s start character
